@@ -7,17 +7,14 @@ public class SpawnManager : MonoBehaviour
 {
     [SerializeField] private LevelDataSO currentLevel;
     [SerializeField] private GameObject LetterPrefab;
-  //  [SerializeField] private GameObject playerPrefab;
     [SerializeField] private LettersDataBase lettersDataBase;
 
 
     //SPAWN POINTS
     [SerializeField] private float innerSpawnRadius = 2f;
-   // [SerializeField] private float OutterSpawnRadius = 6f;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private float minLetterDistance = 1f;
     [SerializeField] private Transform playerStartPoint;
-   // [SerializeField] private Transform lettersPlaceHolder;
 
 
 
@@ -36,17 +33,20 @@ public class SpawnManager : MonoBehaviour
         instance = this;
     }
 
-    public void CreateLevel(LevelDataSO level)
+    public int CreateLevel(LevelDataSO level)
     {
         if (level == null)
         {
             Debug.Log("Create Level was called with missing level");
-            return;
+            return 0;
         }
 
         currentLevel = level;
         SpawnPlayer();
-        SpawnLetters();
+
+        int mainCount = SpawnLetters();
+        return mainCount;
+
 
     }
 
@@ -65,19 +65,19 @@ public class SpawnManager : MonoBehaviour
     }
 
 
-    private void SpawnLetters()
+    private int SpawnLetters()
     {
-
+        int mainCount = 0;
         if (LetterPrefab == null || playerStartPoint == null || currentLevel == null)
         {
             Debug.Log("LetterPrefab or playerStartPoint was not found");
-            return;
+            return 0;
         }
 
         if (currentLevel.lettersPool == null)
         {
             Debug.Log("Level has no lettersPool");
-            return;
+            return 0;
         }
 
         int lettersToSpawn = currentLevel.totalLettersToSpawn;
@@ -120,10 +120,12 @@ public class SpawnManager : MonoBehaviour
                     {
                         bool isMain = chosenData.id == currentLevel.mainLetter;
                         letterScript.Init(chosenData, spriteToUse, isMain);
+                        if (isMain) mainCount++;
                     }
                 }
             }
         }
+        return mainCount;
     }
 
     private bool IsFarEnough(Vector3 letter)

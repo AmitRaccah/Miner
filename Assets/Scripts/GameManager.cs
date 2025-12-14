@@ -7,6 +7,18 @@ public class GameManager : MonoBehaviour
     public LevelDataBase LevelData;
 
     public int currentLevel;
+    private int remainingMainLetters;
+
+    private void OnEnable()
+    {
+        Letter.OnCollected += HandleLetterCollected;
+    }
+
+    private void OnDisable()
+    {
+        Letter.OnCollected -= HandleLetterCollected;
+    }
+
 
     void Start()
     {
@@ -16,11 +28,12 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-
         LevelDataSO data = LevelData.GetLevel(currentLevel);
-        SpawnManager.instance.CreateLevel(data);
+
+        remainingMainLetters = SpawnManager.instance.CreateLevel(data);
         Instantiate(data.backgroundPrefab);
 
+        Debug.Log($"Main letters to collect: {remainingMainLetters}");
     }
 
     public void StartNextLevel()
@@ -31,6 +44,25 @@ public class GameManager : MonoBehaviour
             return;
         }
         StartGame();
+    }
+
+    private void HandleLetterCollected(Letter letter)
+    {
+        if (letter == null)
+        {
+            return;
+        }
+        if (!letter.isMainLetter)
+        {
+            return;
+        }
+
+        remainingMainLetters--;
+
+        if (remainingMainLetters <= 0)
+        {
+            StartNextLevel();
+        }
     }
 }
 

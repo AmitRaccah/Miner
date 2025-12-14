@@ -110,9 +110,12 @@ public class Player : MonoBehaviour
         };
 
         Letter letter = other.GetComponent<Letter>();
+
+        if (letter == null)
         {
-            if (letter == null) return;
+            return;
         }
+        
 
         if (!letter.isMainLetter)
         {
