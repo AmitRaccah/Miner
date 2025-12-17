@@ -245,6 +245,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &723765354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 723765355}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &723765355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723765354}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1366600738
 GameObject:
   m_ObjectHideFlags: 0
@@ -275,6 +306,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1686363043}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1411094235
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1411094236}
+  m_Layer: 0
+  m_Name: LevelRoot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1411094236
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1411094235}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.48515323, y: 0.46094695, z: 0.03394173}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1686363041
 GameObject:
@@ -308,11 +370,11 @@ MonoBehaviour:
   currentLevel: {fileID: 0}
   LetterPrefab: {fileID: 3317658814731925972, guid: de646b218908e7648a537d0765c8aa7b, type: 3}
   lettersDataBase: {fileID: 11400000, guid: b765e6a65da6bad4cbf322a4c00150ee, type: 2}
+  levelRoot: {fileID: 1686363043}
   innerSpawnRadius: 2
   mainCamera: {fileID: 519420031}
   minLetterDistance: 3
   playerStartPoint: {fileID: 1829853354}
-  lettersPlaceHolder: {fileID: 1829853354}
 --- !u!4 &1686363043
 Transform:
   m_ObjectHideFlags: 0
@@ -361,7 +423,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4960d4c05c07d9d418f5da3395fe74b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LevelData: {fileID: 11400000, guid: 7e8e4c7496932764ebb87e5f4938ad58, type: 2}
+  LevelDataBase: {fileID: 11400000, guid: 7e8e4c7496932764ebb87e5f4938ad58, type: 2}
+  level: {fileID: 11400000, guid: 475586010875ba74f9cfb03d74984563, type: 2}
+  letterCounter: 0
   currentLevel: 0
 --- !u!4 &1787798754
 Transform:
@@ -447,3 +511,5 @@ SceneRoots:
   - {fileID: 519420032}
   - {fileID: 1787798754}
   - {fileID: 1686363043}
+  - {fileID: 723765355}
+  - {fileID: 1411094236}

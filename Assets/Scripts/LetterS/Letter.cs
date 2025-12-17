@@ -12,7 +12,7 @@ public class Letter : MonoBehaviour
     public bool isMainLetter;
     public string letterID;
 
-    public static event Action<Letter> OnCollected;
+    //public static event Action<Letter> OnCollected;
 
 
     private void Awake()
@@ -42,9 +42,9 @@ public class Letter : MonoBehaviour
         }
     }
 
-    public void Collect()
-    {
-        OnCollected?.Invoke(this);
-        Destroy(gameObject);
-    }
+    //public void Collect()
+    //{
+    //    OnCollected?.Invoke(this);
+    //    Destroy(gameObject);
+    //}
 }

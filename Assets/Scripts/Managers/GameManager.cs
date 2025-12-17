@@ -47,7 +47,7 @@ public class GameManager : MonoBehaviour
         letterCounter = 0;
 
         SpawnManager.instance.CreateLevel(level);
-        Instantiate(level.backgroundPrefab);
+      //  Instantiate(level.backgroundPrefab);
 
     }
 
@@ -104,4 +104,3 @@ public class GameManager : MonoBehaviour
 }
 
 
-//TODO: *Test OnCollected* 1. Count how many main letters in level(LIST?).  2.Clear level if 0(or if collectedMain = MainLettersInLevel)  3.Move to next stage

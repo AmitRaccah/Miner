@@ -46,60 +46,12 @@ public class Player : MonoBehaviour
         //ROTATION
         if (isRotating == true && hookTransform != null)
         {
-            hookTransform.Rotate(0f, 0f, -rotationSpeed * Time.deltaTime);
-            
+            hookTransform.Rotate(0f, 0f, -rotationSpeed * Time.deltaTime); 
         }
 
-        //HOOK EXIT
-        if (isShooting == true && hookTransform != null)
-        {
-            hookTransform.position += shootDirection * hookSpeed * Time.deltaTime;
+        HookExit();
+        HookReturn();
 
-            //CHANGE BOOLIANS IF DIDNT CATCH A LETTER & CROSSED MaxHookDistance
-            float dist = Vector3.Distance(hookTransform.position, transform.position);
-            if (dist >= maxHookDistance)
-            {
-                isShooting = false;
-                isReturning = true;
-            }
-        }
-
-
-        //RETURN
-        if (isReturning == true && hookTransform != null)
-        {
-            hookTransform.localPosition = Vector3.MoveTowards(hookTransform.localPosition, hookStartLocalPos, hookSpeed * Time.deltaTime);
-
-            if (hookTransform.localPosition == hookStartLocalPos)
-            {
-                hookTransform.localPosition = hookStartLocalPos;
-                isReturning = false;
-                isRotating = true;
-
-                if (carriedMainLetterId != null)
-                {
-                    OnMainLetterDelivered?.Invoke(carriedMainLetterId);
-                    carriedMainLetterId = null;
-
-                    if (carriedLetterTransform != null)
-                    {
-                        Destroy(carriedLetterTransform.gameObject);
-                        carriedLetterTransform = null;
-                    }
-
-                    //foreach (Transform child in hookTransform)
-                    //{
-                    //    Destroy(child.gameObject);
-                    //}
-                }
-
-                //foreach (Transform child in hookTransform)
-                //{
-                //    Destroy(child.gameObject);
-                //}
-
-            }
-        }
         // ROPE BY LINE RENDERER
         if (ropeLine != null)
         {
@@ -130,6 +82,51 @@ public class Player : MonoBehaviour
         isReturning = true;
     }
 
+    private void HookExit()
+    {
+        if (isShooting == true && hookTransform != null)
+        {
+            hookTransform.position += shootDirection * hookSpeed * Time.deltaTime;
+
+            //CHANGE BOOLIANS IF DIDNT CATCH A LETTER & CROSSED MaxHookDistance
+            float dist = Vector3.Distance(hookTransform.position, transform.position);
+            if (dist >= maxHookDistance)
+            {
+                isShooting = false;
+                isReturning = true;
+            }
+        }
+    }
+
+    private void HookReturn()
+    {
+        if (isReturning == true && hookTransform != null)
+        {
+            hookTransform.localPosition = Vector3.MoveTowards(hookTransform.localPosition, hookStartLocalPos, hookSpeed * Time.deltaTime);
+
+            if (hookTransform.localPosition == hookStartLocalPos)
+            {
+                hookTransform.localPosition = hookStartLocalPos;
+                isReturning = false;
+                isRotating = true;
+
+                if (carriedMainLetterId != null)
+                {
+                    //TO GAME MANAGER -  *AFTER* RETURNED
+                    OnMainLetterDelivered?.Invoke(carriedMainLetterId);
+                    carriedMainLetterId = null;
+
+                    if (carriedLetterTransform != null)
+                    {
+                        Destroy(carriedLetterTransform.gameObject);
+                        carriedLetterTransform = null;
+                    }
+
+                }
+            }
+        }
+    }
+
 
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -145,7 +142,7 @@ public class Player : MonoBehaviour
         {
             return;
         }
-
+        //CHECK IF MAIN LETTER
         bool shouldCollectAsMain = GameManager.instance.TryGetLetter(letter.letterID);
 
         if (shouldCollectAsMain == true)

@@ -43,7 +43,8 @@ public class SpawnManager : MonoBehaviour
         }
 
         currentLevel = level;
-        ClearLetters();
+        ClearLevelRoot();
+        SpawnBackground();
         SpawnPlayer();
         SpawnLetters();
         
@@ -238,7 +239,22 @@ public class SpawnManager : MonoBehaviour
         return null;
     }
 
-    private void ClearLetters()
+    private void SpawnBackground()
+    {
+        if (currentLevel == null)
+        {
+            return;
+        }
+        if (currentLevel.background == null)
+        {
+            Debug.Log("No Background Added");
+            return;
+        }
+
+        Instantiate(currentLevel.backgroundPrefab, levelRoot);
+    }
+
+    private void ClearLevelRoot()
     {
         if (levelRoot == null)
         {
