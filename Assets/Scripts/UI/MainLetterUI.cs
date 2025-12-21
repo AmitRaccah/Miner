@@ -1,18 +1,35 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MainLetterUI : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Image mainLetterImage;
+    [SerializeField] private LettersDataBase lettersDataBase;
+
+    private void OnEnable()
     {
-        
+        GameManager.OnLevelStarted += HandleLevelStarted;
+
+        if (GameManager.instance != null && GameManager.instance.level != null)
+        {
+            HandleLevelStarted(GameManager.instance.level);
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        GameManager.OnLevelStarted -= HandleLevelStarted;
+    }
+
+    private void HandleLevelStarted(LevelDataSO level)
+    {
+        if (level == null || mainLetterImage == null || lettersDataBase == null)
+        {
+            return;
+        }
+
+        Sprite sprite = lettersDataBase.GetSpriteByName(level.mainLetter);
+        mainLetterImage.sprite = sprite;
+        mainLetterImage.enabled = (sprite != null);
     }
 }

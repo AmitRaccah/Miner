@@ -21,6 +21,9 @@ public class SpawnManager : MonoBehaviour
 
     public static SpawnManager instance;
 
+    [SerializeField, Range(0f, 1f)] private float maxViewportYForSpawn = 0.85f;
+
+
 
 
     private void Awake()

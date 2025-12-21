@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
+    [SerializeField] private Transform catchAnchor;
     [SerializeField] private Transform hookTransform;
     [SerializeField] private float maxHookDistance = 5f;
     [SerializeField] private LineRenderer ropeLine;
@@ -25,6 +25,8 @@ public class Player : MonoBehaviour
     private string carriedMainLetterId = null;
 
     private Transform carriedLetterTransform = null;
+
+
 
     void Start()
     {
@@ -127,8 +129,10 @@ public class Player : MonoBehaviour
         }
     }
 
+    private void LetterToHookCenter()
+    {
 
-
+    }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (!isShooting) 
@@ -147,7 +151,9 @@ public class Player : MonoBehaviour
 
         if (shouldCollectAsMain == true)
         {
-            letter.transform.SetParent(hookTransform);
+            letter.transform.SetParent(catchAnchor, false);
+            letter.transform.localPosition = Vector3.zero;
+            letter.transform.localRotation = Quaternion.identity;
 
             carriedLetterTransform = letter.transform;
             carriedMainLetterId = letter.letterID;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,7 +10,8 @@ public class GameManager : MonoBehaviour
     public LevelDataSO level;
     public int letterCounter;
     public int currentLevel;
-    
+
+    public static event Action<LevelDataSO> OnLevelStarted;
 
     public static GameManager instance;
 
@@ -45,6 +47,8 @@ public class GameManager : MonoBehaviour
 
         level = LevelDataBase.GetLevel(currentLevel);
         letterCounter = 0;
+
+        OnLevelStarted?.Invoke(level);
 
         SpawnManager.instance.CreateLevel(level);
       //  Instantiate(level.backgroundPrefab);
