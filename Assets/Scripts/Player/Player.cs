@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     //private Vector3 shootDirection;
 
     public static event Action<string> OnMainLetterDelivered;
+    public static event Action OnWrongLetterHit;
+
     private string carriedMainLetterId = null;
 
     private Transform carriedLetterTransform = null;
@@ -191,6 +193,7 @@ public class Player : MonoBehaviour
         else
         {
             Debug.Log("Wrong Letter Hit");
+            OnWrongLetterHit?.Invoke();
         }
 
         ReturnHook();
