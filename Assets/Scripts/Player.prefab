@@ -1259,7 +1259,7 @@ MonoBehaviour:
   catchAnchor: {fileID: 1278613028086809048}
   rotateTransform: {fileID: 8777396373439199614}
   ropeStretchBone: {fileID: 6953486333863454421}
-  maxHookDistance: 600
+  maxHookDistance: 400
   hookSpeed: 500
   rotationSpeed: 75
   animator: {fileID: 6953826110413882717}

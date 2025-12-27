@@ -1,35 +1,112 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class MainLetterUI : MonoBehaviour
 {
-    [SerializeField] private Image mainLetterImage;
+    [SerializeField] private Transform wordPanel;
+    [SerializeField] private Image letterImagePrefab;
     [SerializeField] private LettersDataBase lettersDataBase;
+
+    private List<Image> letterImages = new List<Image>();
 
     private void OnEnable()
     {
         GameManager.OnLevelStarted += HandleLevelStarted;
+        GameManager.OnWordIndexChanged += PaintColor;
 
-        if (GameManager.instance != null && GameManager.instance.level != null)
+        if (GameManager.instance != null)
         {
-            HandleLevelStarted(GameManager.instance.level);
+            if (GameManager.instance.level != null)
+            {
+                HandleLevelStarted(GameManager.instance.level);
+            }
         }
     }
 
     private void OnDisable()
     {
         GameManager.OnLevelStarted -= HandleLevelStarted;
+        GameManager.OnWordIndexChanged -= PaintColor;
     }
 
     private void HandleLevelStarted(LevelDataSO level)
     {
-        if (level == null || mainLetterImage == null || lettersDataBase == null)
+
+        if (lettersDataBase == null || wordPanel == null || letterImagePrefab == null || level == null)
+        {
+            Debug.Log("MainLetterUI OR level missing references.");
+            return;
+        }
+
+        ClearUI();
+
+        // SPAWN IMAGE PER LETTER IF TargetWord IS FILLED
+        if (level.targetWord != null)
+        {
+            if (level.targetWord != "")
+            {
+                BuildWordUI(level.targetWord);
+                return;
+            }
+        }
+        // SPAWN SINGLE LETTER IF TargetWord IS NOT FILLED
+        CreateLetterImage(level.mainLetter);
+    }
+
+    private void BuildWordUI(string targetWord)
+    {
+        // CALLS CreateLetterImage() ONCE PER LETTER IN TargetWord
+        for (int i = 0; i < targetWord.Length; i++)
+        {
+            //USE Substring TO EXTRACT SINGLE LETTER AS ID
+            string letterId = targetWord.Substring(i, 1);
+            CreateLetterImage(letterId);
+        }
+    }
+
+    private void CreateLetterImage(string letterId)
+    {
+        Sprite letterSprite = lettersDataBase.GetSpriteByName(letterId);
+
+        Image newImage = Instantiate(letterImagePrefab, wordPanel);
+        newImage.sprite = letterSprite;
+        newImage.enabled = (letterSprite != null);
+
+        letterImages.Add(newImage);
+    }
+
+    private void PaintColor(int wordIndex)
+    {
+        int collectedIndex = wordIndex - 1;
+
+        if (collectedIndex < 0)
         {
             return;
         }
 
-        Sprite sprite = lettersDataBase.GetSpriteByName(level.mainLetter);
-        mainLetterImage.sprite = sprite;
-        mainLetterImage.enabled = (sprite != null);
+        if (collectedIndex >= letterImages.Count)
+        {
+            return;
+        }
+
+        Image collectedImage = letterImages[collectedIndex];
+
+        if (collectedImage == null)
+        {
+            return;
+        }
+
+        collectedImage.color = Color.black;
+    }
+
+    private void ClearUI()
+    {
+        letterImages.Clear();
+
+        for (int i = wordPanel.childCount - 1; i >= 0; i--)
+        {
+            Destroy(wordPanel.GetChild(i).gameObject);
+        }
     }
 }

@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     private int wordIndex;
 
     public static event Action<LevelDataSO> OnLevelStarted;
-  //  public static event Action<string> OnExpectedLetterChanged;
+    public static event Action<int> OnWordIndexChanged;
 
     public static GameManager instance;
 
@@ -38,28 +38,23 @@ public class GameManager : MonoBehaviour
     }
 
     void Start()
-    {
-        //letterCounter = 0;
-        
+    {        
         StartGame();
-        
     }
-
 
     public void StartGame()
     {
-
         level = LevelDataBase.GetLevel(currentLevel);
         letterCounter = 0;
         wordIndex = 0;
+
+        OnWordIndexChanged?.Invoke(wordIndex);
 
         SetExpectedLetter();
 
         OnLevelStarted?.Invoke(level);
 
         SpawnManager.instance.CreateLevel(level);
-      //  Instantiate(level.backgroundPrefab);
-
     }
 
     public void StartNextLevel()
@@ -88,11 +83,6 @@ public class GameManager : MonoBehaviour
         {
             return false;
         }
-
-        //if (string.IsNullOrWhiteSpace(level.targetWord))
-        //{
-        //    return false;
-        //}
         return true;
     }
 
@@ -167,6 +157,7 @@ public class GameManager : MonoBehaviour
                 return;
             }
             wordIndex++;
+            OnWordIndexChanged?.Invoke(wordIndex);
             SetExpectedLetter();
 
             //Next Level

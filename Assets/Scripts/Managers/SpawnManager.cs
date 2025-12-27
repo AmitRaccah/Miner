@@ -119,7 +119,6 @@ public class SpawnManager : MonoBehaviour
 
     private void SpawnLetters()
     {
-        // TotalLettersToSpawn - MainLetterCount = regularCount
         int total = currentLevel.totalLettersToSpawn;
 
         //ENTER WORD MODE
@@ -127,6 +126,7 @@ public class SpawnManager : MonoBehaviour
         {
             SpawnWordLetters();
 
+            //FILL REMAINING SPOTS WITH REGULAR LETTERS
             int remaining = total - currentLevel.targetWord.Length;
             if (remaining > 0)
             {
@@ -139,7 +139,7 @@ public class SpawnManager : MonoBehaviour
         int mainCount = currentLevel.mainLetterCount;
         int regularCount = total - mainCount;
 
-        //Spawn mains and regulars
+        //SPAWN MAINS AND REGULARS
         SpawnMainLetters(mainCount);
         SpawnRegularLetters(regularCount);
     }
@@ -197,15 +197,20 @@ public class SpawnManager : MonoBehaviour
 
     private void SpawnWordLetters(/*int total*/)
     {
-        //MAKE SURE SPAWN CONTAINS EVERY LETTER FROM FULL WORD
+        //MAKE SURE SPAWN CONTAINS EVERY LETTER FROM FULL WORD ONCE
         for (int i = 0; i < currentLevel.targetWord.Length; i++)
         {
             string id = currentLevel.targetWord.Substring(i, 1);
+            //TRANSLATE ID FROM LettersPool
             LetterDataSO data = GetLetterDataById(id);
 
             if (data != null)
             {
                 SpawnOneLetter(data);
+            }
+            else
+            {
+                Debug.LogWarning($"Missing LetterDataSO for '{id}' in lettersPool (targetWord: {currentLevel.targetWord})");
             }
         }
     }
@@ -232,28 +237,6 @@ public class SpawnManager : MonoBehaviour
         return true;
     }
 
-    private Vector3 GetRandomPointInCameraBounds()
-    {
-        Camera cam;
-
-        if (mainCamera != null)
-        {
-            cam = mainCamera;
-        }
-        else
-        {
-            cam = Camera.main;
-            Debug.Log($"{cam} was not defined in SpawnManager");
-        }
-
-        Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0f, 0f, cam.nearClipPlane));
-        Vector3 topRight = cam.ViewportToWorldPoint(new Vector3(1f, 1f, cam.nearClipPlane));
-
-        float x = Random.Range(bottomLeft.x, topRight.x);
-        float y = Random.Range(bottomLeft.y, topRight.y);
-
-        return new Vector3(x, y, 0f);
-    }
 
     private LetterDataSO GetMainLetterData()
     {
@@ -287,6 +270,7 @@ public class SpawnManager : MonoBehaviour
         for (int i = 0; i < currentLevel.lettersPool.Count; i++)
         {
             LetterDataSO data = currentLevel.lettersPool[i];
+            //VERIFY CORRECT LETTER
             if (data != null && data.id == id)
             {
                 return data;
@@ -325,6 +309,28 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
+    private Vector3 GetRandomPointInCameraBounds()
+    {
+        Camera cam;
+
+        if (mainCamera != null)
+        {
+            cam = mainCamera;
+        }
+        else
+        {
+            cam = Camera.main;
+            Debug.Log($"{cam} was not defined in SpawnManager");
+        }
+
+        Vector3 bottomLeft = cam.ViewportToWorldPoint(new Vector3(0f, 0f, cam.nearClipPlane));
+        Vector3 topRight = cam.ViewportToWorldPoint(new Vector3(1f, 1f, cam.nearClipPlane));
+
+        float x = Random.Range(bottomLeft.x, topRight.x);
+        float y = Random.Range(bottomLeft.y, topRight.y);
+
+        return new Vector3(x, y, 0f);
+    }
 
 
     //GIZMOZ
